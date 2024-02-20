@@ -1,0 +1,328 @@
+---
+title: "Consulting"
+output: html_document
+date: "2024-02-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data=read.csv("MediaT.csv",header = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(esquisse)
+```
+
+```{r}
+data <- slice(data, -c(1:2))
+#data[data == ""] <- NA
+
+```
+
+```{r}
+data %>%
+ filter(!(Q1 %in% c("How old are you?", "{\"ImportId\":\"QID1\"}", ""))) %>%
+ ggplot() +
+  aes(x = Q1) +
+  geom_bar(fill = "#4682B4") +
+  labs(x = "Age", y = "Count", title = "Age Distribution") +
+  theme_minimal()
+```
+
+```{r}
+data %>%
+ filter(!(Q2 %in% c("{\"ImportId\":\"QID2\"}","What is your current level of education",""))) %>%
+ ggplot() +
+  aes(x = Q2) +
+  geom_bar(fill = "#4682B4") +
+  labs(
+    x = "Education Level",
+    y = "Count",
+    title = "Education Distribution"
+  ) +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+data$Q4_1 <- as.numeric(as.character(data$Q4_1))
+
+data$Q5_1 <- as.numeric(sub(" .*", "", as.character(data$Q5_1)))
+
+clean_data <- data %>%
+  filter(!is.na(Q4_1) & !is.na(Q5_1))
+
+correlation_result <- cor.test(clean_data$Q4_1, clean_data$Q5_1, method = "spearman")
+
+print(correlation_result$estimate)
+print(correlation_result$p.value)
+```
+
+```{r}
+data$Q4_2 <- as.numeric(as.character(data$Q4_2))
+
+data$Q5_2 <- as.numeric(sub(" .*", "", as.character(data$Q5_2)))
+
+clean_data2 <- data %>%
+  filter(!is.na(Q4_2) & !is.na(Q5_2))
+
+correlation_result2 <- cor.test(clean_data2$Q4_2, clean_data2$Q5_2, method = "spearman")
+
+print(correlation_result2$estimate)
+print(correlation_result2$p.value)
+```
+
+```{r}
+data$Q4_3 <- as.numeric(as.character(data$Q4_3))
+
+data$Q5_3 <- as.numeric(sub(" .*", "", as.character(data$Q5_3)))
+
+clean_data3 <- data %>%
+  filter(!is.na(Q4_3) & !is.na(Q5_3))
+
+correlation_result3 <- cor.test(clean_data3$Q4_3, clean_data3$Q5_3, method = "spearman")
+
+print(correlation_result3$estimate)
+print(correlation_result3$p.value)
+```
+
+```{r}
+data$Q4_4 <- as.numeric(as.character(data$Q4_4))
+
+data$Q5_4 <- as.numeric(sub(" .*", "", as.character(data$Q5_4)))
+
+clean_data4 <- data %>%
+  filter(!is.na(Q4_4) & !is.na(Q5_4))
+
+correlation_result4 <- cor.test(clean_data4$Q4_4, clean_data4$Q5_4, method = "spearman")
+
+print(correlation_result4$estimate)
+print(correlation_result4$p.value)
+```
+
+```{r}
+data$Q4_5 <- as.numeric(as.character(data$Q4_5))
+
+data$Q5_5 <- as.numeric(sub(" .*", "", as.character(data$Q5_5)))
+
+clean_data5 <- data %>%
+  filter(!is.na(Q4_5) & !is.na(Q5_5))
+
+correlation_result5 <- cor.test(clean_data5$Q4_5, clean_data5$Q5_5, method = "spearman")
+
+print(correlation_result5$estimate)
+print(correlation_result5$p.value)
+```
+
+```{r}
+data$Q4_6 <- as.numeric(as.character(data$Q4_6))
+
+data$Q5_6 <- as.numeric(sub(" .*", "", as.character(data$Q5_6)))
+
+clean_data6 <- data %>%
+  filter(!is.na(Q4_6) & !is.na(Q5_6))
+
+correlation_result6 <- cor.test(clean_data6$Q4_6, clean_data6$Q5_6, method = "spearman")
+
+print(correlation_result6$estimate)
+print(correlation_result6$p.value)
+```
+```{r}
+data$Q4_7 <- as.numeric(as.character(data$Q4_7))
+
+data$Q5_7 <- as.numeric(sub(" .*", "", as.character(data$Q5_7)))
+
+clean_data7 <- data %>%
+  filter(!is.na(Q4_7) & !is.na(Q5_7))
+
+correlation_result7 <- cor.test(clean_data7$Q4_7, clean_data7$Q5_7, method = "spearman")
+
+print(correlation_result7$estimate)
+print(correlation_result7$p.value)
+```
+```{r}
+data$Q4_8 <- as.numeric(as.character(data$Q4_8))
+
+data$Q5_8 <- as.numeric(sub(" .*", "", as.character(data$Q5_8)))
+
+clean_data8 <- data %>%
+  filter(!is.na(Q4_8) & !is.na(Q5_8))
+
+correlation_result8 <- cor.test(clean_data8$Q4_8, clean_data8$Q5_8, method = "spearman")
+
+print(correlation_result8$estimate)
+print(correlation_result8$p.value)
+```
+```{r}
+data$Q4_9 <- as.numeric(as.character(data$Q4_9))
+
+data$Q5_9 <- as.numeric(sub(" .*", "", as.character(data$Q5_9)))
+
+clean_data9 <- data %>%
+  filter(!is.na(Q4_9) & !is.na(Q5_9))
+
+correlation_result9 <- cor.test(clean_data9$Q4_9, clean_data9$Q5_9, method = "spearman")
+
+print(correlation_result9$estimate)
+print(correlation_result9$p.value)
+```
+```{r}
+data$Q4_10 <- as.numeric(as.character(data$Q4_10))
+
+data$Q5_10 <- as.numeric(sub(" .*", "", as.character(data$Q5_10)))
+
+clean_data10 <- data %>%
+  filter(!is.na(Q4_10) & !is.na(Q5_10))
+
+correlation_result10 <- cor.test(clean_data10$Q4_10, clean_data10$Q5_10, method = "spearman")
+
+print(correlation_result10$estimate)
+print(correlation_result10$p.value)
+```
+```{r}
+data$Q4_11 <- as.numeric(as.character(data$Q4_11))
+
+data$Q5_11 <- as.numeric(sub(" .*", "", as.character(data$Q5_11)))
+
+clean_data11 <- data %>%
+  filter(!is.na(Q4_11) & !is.na(Q5_11))
+
+correlation_result11 <- cor.test(clean_data11$Q4_11, clean_data11$Q5_11, method = "spearman")
+
+print(correlation_result11$estimate)
+print(correlation_result11$p.value)
+```
+```{r}
+data$Q4_12 <- as.numeric(as.character(data$Q4_12))
+
+data$Q5_12 <- as.numeric(sub(" .*", "", as.character(data$Q5_12)))
+
+clean_data12 <- data %>%
+  filter(!is.na(Q4_12) & !is.na(Q5_12))
+
+correlation_result12 <- cor.test(clean_data12$Q4_12, clean_data12$Q5_12, method = "spearman")
+
+print(correlation_result12$estimate)
+print(correlation_result12$p.value)
+```
+```{r}
+estimate <- c(correlation_result$estimate,correlation_result2$estimate,correlation_result3$estimate,correlation_result4$estimate,correlation_result5$estimate,correlation_result6$estimate,correlation_result7$estimate,correlation_result8$estimate,correlation_result9$estimate, correlation_result10$estimate, correlation_result11$estimate,correlation_result12$estimate)
+p_value <- c(correlation_result$p.value, correlation_result2$p.value, correlation_result3$p.value,correlation_result4$p.value, correlation_result5$p.value, correlation_result6$p.value,correlation_result7$p.value, correlation_result8$p.value, correlation_result9$p.value,correlation_result10$p.value, correlation_result11$p.value, correlation_result12$p.value)
+
+result_table <- data.frame(Platform = c("Tik Tok", "Instagram", "Twitter","Facebook","CNN","Fox News","MSNBC","The New York Times","The Wall Street Journal","The Washington Post","The Boston Globe","Local Community/Campus Newspapers"),
+                           Estimate = estimate,
+                           P_Value = p_value)
+
+print(result_table)
+
+```
+
+```{r, echo=FALSE, fig.align='center'}
+par(mfrow=c(3, 4))
+plot(clean_data$Q4_1, clean_data$Q5_1,
+     main = "Tik Tok",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data$Q5_1 ~ clean_data$Q4_1)
+abline(model, col = "red")
+
+
+plot(clean_data2$Q4_2, clean_data2$Q5_2,
+     main = "Instagram",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data2$Q5_2 ~ clean_data2$Q4_2)
+abline(model, col = "red")
+
+
+plot(clean_data3$Q4_3, clean_data3$Q5_3,
+     main = "Twitter",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data3$Q5_3 ~ clean_data3$Q4_3)
+abline(model, col = "red")
+
+plot(clean_data4$Q4_4, clean_data4$Q5_4,
+     main = "Facebook",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data4$Q5_4 ~ clean_data4$Q4_4)
+abline(model, col = "red")
+
+plot(clean_data5$Q4_5, clean_data5$Q5_5,
+     main = "CNN",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data5$Q5_5 ~ clean_data5$Q4_5)
+abline(model, col = "red")
+
+plot(clean_data6$Q4_6, clean_data6$Q5_6,
+     main = "Fox News",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data6$Q5_6 ~ clean_data6$Q4_6)
+abline(model, col = "red")
+
+plot(clean_data7$Q4_7, clean_data7$Q5_7,
+     main = "MSNBC",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data7$Q5_7 ~ clean_data7$Q4_7)
+abline(model, col = "red")
+
+plot(clean_data8$Q4_8, clean_data8$Q5_8,
+     main = "The New York Times",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data8$Q5_8 ~ clean_data8$Q4_8)
+abline(model, col = "red")
+
+plot(clean_data9$Q4_9, clean_data9$Q5_9,
+     main = "The Wall Street Journal",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data9$Q5_9 ~ clean_data9$Q4_9)
+abline(model, col = "red")
+
+plot(clean_data10$Q4_10, clean_data10$Q5_10,
+     main = "The Washington Post",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data10$Q5_10 ~ clean_data10$Q4_10)
+abline(model, col = "red")
+
+plot(clean_data11$Q4_11, clean_data11$Q5_11,
+     main = "The Boston Globe",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data11$Q5_11 ~ clean_data11$Q4_11)
+abline(model, col = "red")
+
+plot(clean_data12$Q4_12, clean_data12$Q5_12,
+     main = "Local Community/Campus Newspapers",
+     xlab = "Usage",
+     ylab = "Trust",
+     pch = 19)
+model <- lm(clean_data12$Q5_12 ~ clean_data12$Q4_12)
+abline(model, col = "red")
+
+par(mfrow=c(1, 1))
+```
+
