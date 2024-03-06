@@ -10,43 +10,25 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-
-
-# Load the MASS package
-library(MASS)
-library(dplyr)
-# Combine Q4 and Q5 variables into a new dataframe
-cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
-
-prop_data <- data.frame(
-  Q4 = do.call(c, lapply(cd, function(x) x[grep("^Q4_", names(clean_data))])),
-  Q5 = do.call(c, lapply(cd, function(x) x[grep("^Q5_", names(clean_data))]))
-)
-# Convert Q4 and Q5 to ordered factors if they are not already
-prop_data$Q4 <- ordered(prop_data$Q4)
-prop_data$Q5 <- ordered(prop_data$Q5)
-
-# Fit the proportional odds logistic regression model
-prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
-
-# Print the summary of the model
-summary(prop_model)
+library(ggplot2)
+library(gridExtra)
 ```
+
+
+##All news sources
 ```{r}
 # Load the MASS package
 library(MASS)
 library(dplyr)
 
 # Combine Q4 and Q5 variables into a new dataframe
-cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
-
+cd <- clean_data %>% dplyr::select(starts_with("Q4_"), starts_with("Q5_"))
+cd1 <- cd %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
 # Create prop_data dataframe
 prop_data <- data.frame(
-  Q4 = do.call(c, cd %>% select(starts_with("Q4_"))),
-  Q5 = do.call(c, cd %>% select(starts_with("Q5_")))
+  Q4 = do.call(c, cd1 %>% select(starts_with("Q4_"))),
+  Q5 = do.call(c, cd1 %>% select(starts_with("Q5_")))
 )
-
-# Convert Q4 and Q5 to ordered factors if they are not already
 prop_data$Q4 <- ordered(prop_data$Q4)
 prop_data$Q5 <- ordered(prop_data$Q5)
 
@@ -57,4 +39,128 @@ prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
 summary(prop_model)
 
 ```
+
+
+```{r}
+# Load the effects package
+library(effects)
+
+# Create effects object
+effect <- effect("Q4", prop_model)
+
+# Plot the effects
+a<- plot(effect, multiline = TRUE, main = "Usage vs Trust")
+a
+```
+
+
+##Partial Truth
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
+
+# Create two dataframes, one with Q4_1 to Q4_4 and Q5_1 to Q5_4
+df1 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q5_[1-4]$"))
+
+# The other with the rest
+df2 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q5_[1-4]$"))
+
+```
+
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
+
+# Create dataframe df1 with Q4_1 to Q4_4 and Q5_1 to Q5_4
+df1 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q5_[1-4]$"))
+
+# Convert non-numeric characters to numeric for df1
+df1 <- df1 %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+
+# Create prop_data dataframe for df1
+prop_data_df1 <- data.frame(
+  Q4 = do.call(c, df1 %>% select(starts_with("Q4_"))),
+  Q5 = do.call(c, df1 %>% select(starts_with("Q5_")))
+)
+
+# Convert Q4 and Q5 to ordered factors if they are not already
+prop_data_df1$Q4 <- ordered(prop_data_df1$Q4)
+prop_data_df1$Q5 <- ordered(prop_data_df1$Q5)
+
+# Fit the proportional odds logistic regression model for df1
+prop_model_df1 <- polr(Q5 ~ Q4, data = prop_data_df1, Hess = TRUE)
+
+# Print the summary of the model for df1
+summary(prop_model_df1)
+
+```
+
+#Visualiza partial truth
+```{r}
+# Create effects object
+effect <- effect("Q4", prop_model_df1)
+
+# Plot the effects
+b<- plot(effect, multiline = TRUE, main = "Usage vs Trust PT")
+b
+
+```
+
+##Full Truth
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
+
+# Create dataframe df2 excluding Q4_1 to Q4_4 and Q5_1 to Q5_4
+df2 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q5_[1-4]$"))
+
+# Convert non-numeric characters to numeric for df2
+df2 <- df2 %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+
+# Create prop_data dataframe for df2
+prop_data_df2 <- data.frame(
+  Q4 = do.call(c, df2 %>% select(starts_with("Q4_"))),
+  Q5 = do.call(c, df2 %>% select(starts_with("Q5_")))
+)
+
+# Convert Q4 and Q5 to ordered factors if they are not already
+prop_data_df2$Q4 <- ordered(prop_data_df2$Q4)
+prop_data_df2$Q5 <- ordered(prop_data_df2$Q5)
+
+# Fit the proportional odds logistic regression model for df2
+prop_model_df2 <- polr(Q5 ~ Q4, data = prop_data_df2, Hess = TRUE)
+
+# Print the summary of the model for df2
+summary(prop_model_df2)
+
+```
+
+# Visualize Full Truth
+
+```{r}
+# Load the effects package
+library(effects)
+
+# Create effects object
+effect <- effect("Q4", prop_model_df2)
+
+# Plot the effects
+d<- plot(effect, multiline = TRUE, main = "Usage vs Trust FT")
+d
+```
+
+```{r}
+grid.arrange(a,b,d, ncol = 3)
+```
+
+
+```{r}
+prop_data$Group <- ifelse(row.names(prop_data) %in% row.names(df1), 0, 1)
+prop_model_with_group <- polr(Q5 ~ Q4 + Group, data = prop_data, Hess = TRUE)
+summary(prop_model_with_group)
+predicted_probs <- predict(prop_model_with_group, type = "response")
+
+```
+
+
 
