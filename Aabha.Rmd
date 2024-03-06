@@ -1,0 +1,60 @@
+---
+title: "Prop-odds regression"
+author: "Aabha Latkar"
+date: "2024-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+
+# Load the MASS package
+library(MASS)
+library(dplyr)
+# Combine Q4 and Q5 variables into a new dataframe
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
+
+prop_data <- data.frame(
+  Q4 = do.call(c, lapply(cd, function(x) x[grep("^Q4_", names(clean_data))])),
+  Q5 = do.call(c, lapply(cd, function(x) x[grep("^Q5_", names(clean_data))]))
+)
+# Convert Q4 and Q5 to ordered factors if they are not already
+prop_data$Q4 <- ordered(prop_data$Q4)
+prop_data$Q5 <- ordered(prop_data$Q5)
+
+# Fit the proportional odds logistic regression model
+prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
+
+# Print the summary of the model
+summary(prop_model)
+```
+```{r}
+# Load the MASS package
+library(MASS)
+library(dplyr)
+
+# Combine Q4 and Q5 variables into a new dataframe
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q5_"))
+
+# Create prop_data dataframe
+prop_data <- data.frame(
+  Q4 = do.call(c, cd %>% select(starts_with("Q4_"))),
+  Q5 = do.call(c, cd %>% select(starts_with("Q5_")))
+)
+
+# Convert Q4 and Q5 to ordered factors if they are not already
+prop_data$Q4 <- ordered(prop_data$Q4)
+prop_data$Q5 <- ordered(prop_data$Q5)
+
+# Fit the proportional odds logistic regression model
+prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
+
+# Print the summary of the model
+summary(prop_model)
+
+```
+

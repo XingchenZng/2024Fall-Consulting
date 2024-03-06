@@ -1,0 +1,139 @@
+---
+title: "Reshare and Usage"
+author: "Aabha Latkar"
+date: "2024-03-05"
+output: html_document
+---
+
+```{r}
+# Load the MASS package
+library(MASS)
+library(dplyr)
+
+# Combine Q4 and Q8 variables into a new dataframe
+cd <- clean_data %>% dplyr::select(starts_with("Q4_"), starts_with("Q8_"))
+cd1 <- cd %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+
+# Create prop_data dataframe
+prop_data_q4q8 <- data.frame(
+  Q4 = do.call(c, cd1 %>% select(starts_with("Q4_"))),
+  Q8 = do.call(c, cd1 %>% select(starts_with("Q8_")))
+)
+
+# Convert Q4 and Q8 to ordered factors if they are not already
+prop_data_q4q8$Q4 <- ordered(prop_data_q4q8$Q4)
+prop_data_q4q8$Q8 <- ordered(prop_data_q4q8$Q8)
+
+# Fit the proportional odds logistic regression model
+prop_model_q4q8 <- polr(Q8 ~ Q4, data = prop_data_q4q8, Hess = TRUE)
+
+# Print the summary of the model
+summary(prop_model_q4q8)
+
+```
+
+```{r}
+# Create effects object
+effect <- effect("Q4", prop_model_q4q8)
+
+# Plot the effects
+z<- plot(effect, multiline = TRUE, main = "Usage vs Reshare")
+```
+
+
+
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q8_"))
+
+# Create two dataframes, one with Q4_1 to Q4_4 and Q8_1 to Q8_4
+df1_q4q8 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q8_[1-4]$"))
+
+# The other with the rest
+df2_q4q8 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q8_[1-4]$"))
+
+```
+
+##Partial Truth
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q8_"))
+
+# Create dataframe df1 with Q4_1 to Q4_4 and Q8_1 to Q8_4
+df1_q4q8 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q8_[1-4]$"))
+
+# Convert non-numeric characters to numeric for df1
+df1_q4q8 <- df1_q4q8 %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+
+# Create prop_data dataframe for df1
+prop_data_df1_q4q8 <- data.frame(
+  Q4 = do.call(c, df1_q4q8 %>% select(starts_with("Q4_"))),
+  Q8 = do.call(c, df1_q4q8 %>% select(starts_with("Q8_")))
+)
+
+# Convert Q4 and Q8 to ordered factors if they are not already
+prop_data_df1_q4q8$Q4 <- ordered(prop_data_df1_q4q8$Q4)
+prop_data_df1_q4q8$Q8 <- ordered(prop_data_df1_q4q8$Q8)
+
+# Fit the proportional odds logistic regression model for df1
+prop_model_df1_q4q8 <- polr(Q8 ~ Q4, data = prop_data_df1_q4q8, Hess = TRUE)
+
+# Print the summary of the model for df1
+summary(prop_model_df1_q4q8)
+
+```
+
+#Visualiza
+```{r}
+# Create effects object
+effect <- effect("Q4", prop_model_df1_q4q8)
+
+# Plot the effects
+y<- plot(effect, multiline = TRUE, main = "Usage vs Reshare PT")
+y
+```
+
+
+```{r}
+# Assuming cd is the cleaned data
+cd <- clean_data %>% select(starts_with("Q4_"), starts_with("Q8_"))
+
+# Create dataframe df2 excluding Q4_1 to Q4_4 and Q8_1 to Q8_4
+df2_q4q8 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q8_[1-4]$"))
+
+# Convert non-numeric characters to numeric for df2
+df2_q4q8 <- df2_q4q8 %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+
+# Create prop_data dataframe for df2
+prop_data_df2_q4q8 <- data.frame(
+  Q4 = do.call(c, df2_q4q8 %>% select(starts_with("Q4_"))),
+  Q8 = do.call(c, df2_q4q8 %>% select(starts_with("Q8_")))
+)
+
+# Convert Q4 and Q8 to ordered factors if they are not already
+prop_data_df2_q4q8$Q4 <- ordered(prop_data_df2_q4q8$Q4)
+prop_data_df2_q4q8$Q8 <- ordered(prop_data_df2_q4q8$Q8)
+
+# Fit the proportional odds logistic regression model for df2
+prop_model_df2_q4q8 <- polr(Q8 ~ Q4, data = prop_data_df2_q4q8, Hess = TRUE)
+
+# Print the summary of the model for df2
+summary(prop_model_df2_q4q8)
+
+```
+
+```{r}
+# Create effects object
+effect <- effect("Q4", prop_model_df2_q4q8)
+
+# Plot the effects
+x<- plot(effect, multiline = TRUE, main = "Usage vs Reshare FT")
+x
+```
+```{r}
+grid.arrange(x, y, z, ncol = 3)
+```
+
+
+
+
