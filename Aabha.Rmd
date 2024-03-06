@@ -158,8 +158,6 @@ grid.arrange(a,b,d, ncol = 3)
 prop_data$Group <- ifelse(row.names(prop_data) %in% row.names(df1), 0, 1)
 prop_model_with_group <- polr(Q5 ~ Q4 + Group, data = prop_data, Hess = TRUE)
 summary(prop_model_with_group)
-predicted_probs <- predict(prop_model_with_group, type = "response")
-
 ```
 
 
