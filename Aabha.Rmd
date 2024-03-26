@@ -12,25 +12,44 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(ggplot2)
 library(gridExtra)
+# Load the MASS package
+library(MASS)
+library(dplyr)
 ```
 
 
 ##All news sources
 ```{r}
-# Load the MASS package
-library(MASS)
-library(dplyr)
+# Combine Q4 and Q5 variables into a new dataframe
+cd <- clean_data[, grepl("^Q4_", names(clean_data)) | grepl("^Q5_", names(clean_data))]
+cd1 <- cd %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+# Create prop_data dataframe
+prop_data <- data.frame(
+  Q4 = do.call(c, cd1),
+  Q5 = do.call(c, cd1)
+)
+prop_data$Q5 <- factor(prop_data$Q5)
+# Fit the proportional odds logistic regression model
+prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
+
+# Print the summary of the model
+summary(prop_model)
+
+```
+
+```{r}
 
 # Combine Q4 and Q5 variables into a new dataframe
 cd <- clean_data %>% dplyr::select(starts_with("Q4_"), starts_with("Q5_"))
 cd1 <- cd %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
 # Create prop_data dataframe
 prop_data <- data.frame(
-  Q4 = do.call(c, cd1 %>% select(starts_with("Q4_"))),
-  Q5 = do.call(c, cd1 %>% select(starts_with("Q5_")))
+  Q4 = do.call(c, cd1[, grepl("^Q4_", names(cd1))]),
+  Q5 = do.call(c, cd1[, grepl("^Q5_", names(cd1))])
 )
-prop_data$Q4 <- ordered(prop_data$Q4)
-prop_data$Q5 <- ordered(prop_data$Q5)
+
+prop_data$Q4 <- ordered(prop_data$Q4 )
+prop_data$Q5 <- ordered(prop_data$Q5 )
 
 # Fit the proportional odds logistic regression model
 prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
@@ -66,6 +85,17 @@ df1 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q5_[1-4]$"))
 df2 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q5_[1-4]$"))
 
 ```
+```{r}
+# Assuming cd is the cleaned data
+
+# Create two dataframes, one with Q4_1 to Q4_4 and Q5_1 to Q5_4
+df1 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q5_[1-4]$"))
+
+# The other with the rest
+df2 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q5_[1-4]$"))
+
+```
+
 
 ```{r}
 # Assuming cd is the cleaned data

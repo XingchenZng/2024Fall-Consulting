@@ -13,7 +13,7 @@ library(dplyr)
 
 # Combine Q4 and Q8 variables into a new dataframe
 cd <- clean_data %>% dplyr::select(starts_with("Q4_"), starts_with("Q8_"))
-cd1 <- cd %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
+cd1 <- clean_data %>% mutate_all(~ as.numeric(gsub("[^0-9]+", "", .)))
 
 # Create prop_data dataframe
 prop_data_q4q8 <- data.frame(
