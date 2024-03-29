@@ -29,11 +29,6 @@ prop_data <- data.frame(
   Q5 = do.call(c, cd1)
 )
 prop_data$Q5 <- factor(prop_data$Q5)
-# Fit the proportional odds logistic regression model
-prop_model <- polr(Q5 ~ Q4, data = prop_data, Hess = TRUE)
-
-# Print the summary of the model
-summary(prop_model)
 
 ```
 
@@ -85,6 +80,8 @@ df1 <- cd %>% select(matches("^Q4_[1-4]$"), matches("^Q5_[1-4]$"))
 df2 <- cd %>% select(-matches("^Q4_[1-4]$"), -matches("^Q5_[1-4]$"))
 
 ```
+
+
 ```{r}
 # Assuming cd is the cleaned data
 
@@ -180,7 +177,7 @@ d
 ```
 
 ```{r}
-grid.arrange(a,b,d, ncol = 3)
+grid.arrange(b,d, ncol = 3)
 ```
 
 

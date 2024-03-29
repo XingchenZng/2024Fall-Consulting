@@ -132,8 +132,9 @@ x<- plot(effect, multiline = TRUE, main = "Usage vs Reshare FT")
 x
 ```
 ```{r}
-grid.arrange(x, y, z, ncol = 3)
+grid.arrange(x, y, ncol = 3)
 ```
+
 
 
 
