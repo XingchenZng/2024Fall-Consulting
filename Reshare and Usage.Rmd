@@ -90,7 +90,7 @@ summary(prop_model_df1_q4q8)
 effect <- effect("Q4", prop_model_df1_q4q8)
 
 # Plot the effects
-y<- plot(effect, multiline = TRUE, main = "Usage vs Reshare PT")
+y<- plot(effect, multiline = TRUE, main = "Usage vs Reshare for social media")
 y
 ```
 
@@ -128,7 +128,7 @@ summary(prop_model_df2_q4q8)
 effect <- effect("Q4", prop_model_df2_q4q8)
 
 # Plot the effects
-x<- plot(effect, multiline = TRUE, main = "Usage vs Reshare FT")
+x<- plot(effect, multiline = TRUE, main = "Usage vs Reshare for traditional media")
 x
 ```
 ```{r}

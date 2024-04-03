@@ -128,7 +128,7 @@ summary(prop_model_df1)
 effect <- effect("Q4", prop_model_df1)
 
 # Plot the effects
-b<- plot(effect, multiline = TRUE, main = "Usage vs Trust PT")
+b<- plot(effect, multiline = TRUE, main = "Usage vs Trust for Social Media")
 b
 
 ```
@@ -172,7 +172,7 @@ library(effects)
 effect <- effect("Q4", prop_model_df2)
 
 # Plot the effects
-d<- plot(effect, multiline = TRUE, main = "Usage vs Trust FT")
+d<- plot(effect, multiline = TRUE, main = "Usage vs Trust for Traditional Media")
 d
 ```
 
